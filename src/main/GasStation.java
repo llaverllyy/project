@@ -17,18 +17,18 @@ a) вводятся все данные, отмеченные в условии 
 */
 
 public class GasStation {
-    public static final int GASSTATION_DURATION = 240;
-    public static final int MAINTENANCE_INTERVAL = 45;
+    public static final int GASSTATION_DURATION_MIN = 240;
+    public static final int MAINTENANCE_INTERVAL_MIN = 45;
     private static final Logger logger = Logger.getLogger(GasStation.class.getName());
 
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
-            logger.info("Введите среднее время заправки: ");
+            logger.info("Введите среднее время заправки (в минутах): ");
             int refuelTime = scanner.nextInt();
 
             int[] maintenanceTimes = new int[4];
             for (int i = 0; i < 4; i++) {
-                logger.info(String.format("Введите время техобслуживания для колонки #%d:", i + 1));
+                logger.info(String.format("Введите время техобслуживания для колонки #%d (в минутах):", i + 1));
                 maintenanceTimes[i] = scanner.nextInt();
             }
 
@@ -61,3 +61,4 @@ public class GasStation {
         }
     }
 }
+//hgtrjhtreefg

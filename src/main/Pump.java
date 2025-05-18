@@ -1,5 +1,7 @@
 package main;
 
+import java.time.Duration;
+
 public class Pump extends Thread {
     private final int pumpId;
     private final Duration refuelDuration;
@@ -8,8 +10,8 @@ public class Pump extends Thread {
 
     public Pump(int pumpId, int refuelMinutes, int maintenanceMinutes) {
         this.pumpId = pumpId;
-        this.refuelDuration = new Duration(refuelMinutes);
-        this.maintenanceDuration = new Duration(maintenanceMinutes);
+        this.refuelDuration = Duration.ofMinutes(refuelMinutes);
+        this.maintenanceDuration = Duration.ofMinutes(maintenanceMinutes);
     }
 
     public int getPumpId() {
@@ -20,19 +22,18 @@ public class Pump extends Thread {
         return carsServed;
     }
 
-    @Override
     public void run() {
-        Duration currentTime = new Duration(0);
-        Duration totalDuration = new Duration(GasStation.GASSTATION_DURATION);
-        Duration maintenanceInterval = new Duration(GasStation.MAINTENANCE_INTERVAL);
+        Duration currentTime = Duration.ZERO;
+        Duration totalDuration = Duration.ofMinutes(GasStation.GASSTATION_DURATION_MIN);
+        Duration maintenanceInterval = Duration.ofMinutes(GasStation.MAINTENANCE_INTERVAL_MIN);
 
-        while (currentTime.lessThan(totalDuration)) {
-            if (currentTime.isMultipleOf(maintenanceInterval)) {
-                currentTime = currentTime.add(maintenanceDuration);
+        while (currentTime.compareTo(totalDuration) < 0) {
+            if (currentTime.toMinutes() % maintenanceInterval.toMinutes() == 0 && !currentTime.isZero()) {
+                currentTime = currentTime.plus(maintenanceDuration);
                 continue;
             }
             carsServed++;
-            currentTime = currentTime.add(refuelDuration);
+            currentTime = currentTime.plus(refuelDuration);
         }
     }
 }
